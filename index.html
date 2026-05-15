@@ -32,32 +32,6 @@
       margin: 5px;
     }
 
-    .adjuster-box {
-      margin: 15px auto;
-      background: white;
-      padding: 15px;
-      width: 350px;
-      max-width: 90%;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-    }
-
-    .adjuster-box label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    #verticalAdjuster {
-      width: 100%;
-      cursor: pointer;
-    }
-
-    #positionValue {
-      font-weight: bold;
-      color: maroon;
-    }
-
     #certificate {
       position: relative;
       width: 1000px;
@@ -74,7 +48,14 @@
 
     #certName {
       position: absolute;
+
+      /* 
+        ADJUST NAME VERTICAL POSITION HERE
+        Lower number = move name upward
+        Higher number = move name downward
+      */
       top: 48%;
+
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 46px;
@@ -99,27 +80,6 @@
   <button onclick="generateCertificate()">Generate Certificate</button>
   <button onclick="downloadCertificate()">Download Certificate</button>
 
-  <div class="adjuster-box">
-    <label for="verticalAdjuster">
-      Adjust Name Vertical Position:
-      <span id="positionValue">48%</span>
-    </label>
-
-    <input 
-      type="range" 
-      id="verticalAdjuster" 
-      min="20" 
-      max="80" 
-      value="48" 
-      step="1"
-      oninput="adjustNamePosition()"
-    >
-
-    <p style="font-size: 13px; color: #666; margin-bottom: 0;">
-      Move left = higher, move right = lower
-    </p>
-  </div>
-
   <div id="certificate">
     <img src="./cert.png" alt="Certificate Background">
     <div id="certName">Your Name Here</div>
@@ -137,15 +97,16 @@
       document.getElementById("certName").textContent = name.toUpperCase();
     }
 
-    function adjustNamePosition() {
-      const position = document.getElementById("verticalAdjuster").value;
-      const certName = document.getElementById("certName");
-
-      certName.style.top = position + "%";
-      document.getElementById("positionValue").textContent = position + "%";
-    }
-
     function downloadCertificate() {
+      const name = document.getElementById("fullName").value.trim();
+
+      if (!name) {
+        alert("Please enter your full name first.");
+        return;
+      }
+
+      generateCertificate();
+
       const certificate = document.getElementById("certificate");
 
       html2canvas(certificate, {
