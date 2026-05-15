@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Certificate Generator</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      text-align: center;
+      padding: 30px;
+    }
+
+    input {
+      padding: 12px;
+      width: 300px;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background: maroon;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+
+    #certificate {
+      position: relative;
+      width: 1000px;
+      max-width: 100%;
+      margin: 25px auto;
+      background: white;
+    }
+
+    #certificate img {
+      width: 100%;
+      display: block;
+    }
+
+    #certName {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 46px;
+      font-family: Georgia, serif;
+      font-weight: bold;
+      color: #111;
+      width: 80%;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Certificate Generator</h1>
+  <p>Enter your full name below:</p>
+
+  <input type="text" id="fullName" placeholder="Type your full name">
+  <br>
+  <button onclick="generateCertificate()">Generate Certificate</button>
+  <button onclick="downloadCertificate()">Download Certificate</button>
+
+  <div id="certificate">
+    <img src="certificate-bg.png" alt="Certificate Background">
+    <div id="certName">Your Name Here</div>
+  </div>
+
+  <script>
+    function generateCertificate() {
+      const name = document.getElementById("fullName").value.trim();
+
+      if (!name) {
+        alert("Please enter your full name.");
+        return;
+      }
+
+      document.getElementById("certName").textContent = name.toUpperCase();
+    }
+
+    function downloadCertificate() {
+      const certificate = document.getElementById("certificate");
+
+      html2canvas(certificate, {
+        scale: 3,
+        useCORS: true
+      }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "certificate.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  </script>
+
+</body>
+</html>
